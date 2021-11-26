@@ -4,6 +4,8 @@ Image fusion, also called image sharpening or multisensory merging, has been dev
 
 The automatization of the sharpening routine proposed by Li et al. (2020) is a significant upgrade that makes it possible to easily and quickly sharpen many images or time series and removes the human factor, which can introduce error. 
 
+This study sharpened a series of multispectral Sentinel-2 with Planetscope imagery by automating and slightly modifying the algorithm suggested by Li et al. (2020).
+
 
 ## How to cite
 
