@@ -1,1 +1,1 @@
-#Sharpening Sentinel-2 with Planetscope
+# Sharpening Sentinel-2 with Planetscope
