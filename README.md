@@ -7,7 +7,7 @@ This repository proposes the automatization of the RGB-NIR sharpening and SWIR-1
 In this study, we have applied the method proposed by Li et al. (2020) to sharpen Sentinel-2 with Planetscope images. We automatized and slightly changed Li et al. (2020) approach by using other tools as outlined below but with the same workflow.
 
 ---DIAGRAM JPG---
-!(workflow_diagram.jpeg)
+![diagram](workflow_diagram.jpeg)
 
 All the details and tests are described in the article ------ .
 
