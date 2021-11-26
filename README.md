@@ -14,7 +14,22 @@ All the details and tests are described in the article ------ .
 
 ## Repository Structure
 ```
-
+Sharpening-S2_Planetscope
+│── README.md
+│── requirements.txt
+├── code/
+│   ├── __init__.py
+│   ├── classification.py
+│   ├── main.py
+│   └── uniqueList.py
+├── tests/
+│   ├── ###img1/
+│   ├── ###img2/
+│   └── ###imgn/
+└── data/
+│   ├── img1/
+│   ├── img2/
+│  
 
 ```
 
