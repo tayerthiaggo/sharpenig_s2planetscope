@@ -18,9 +18,11 @@ import rioxarray as rxr
 import cv2 as cv
 import numpy as np
 
+from IPython.display import clear_output
+
 
 def stack_sharpen_vnir_swir (sharp_vnir, sharp_swir, out_path_name):
-
+    #make sure that vnir and swir have the exact same extent
     minx, miny, maxx, maxy = sharp_vnir.rio.bounds()
     sharp_vnir_bbox = box(minx, miny, maxx, maxy)
     gdf= gpd.GeoDataFrame({'geometry': [sharp_vnir_bbox]}, crs= sharp_vnir.rio.crs)
@@ -30,10 +32,9 @@ def stack_sharpen_vnir_swir (sharp_vnir, sharp_swir, out_path_name):
     sharp_swir_bbox = box(minx, miny, maxx, maxy)
     gdf= gpd.GeoDataFrame({'geometry': [sharp_swir_bbox]}, crs= sharp_vnir.rio.crs)
     sharp_vnir = sharp_vnir.rio.clip(gdf.geometry.apply(mapping), gdf.crs)
-    
+    #stack bands
     stack = xr.concat([sharp_vnir, sharp_swir], dim = 'band')
     stack.rio.to_raster(out_path_name, compress='lzw')
-    
     return stack
 
 class Sharpen():
@@ -43,7 +44,7 @@ class Sharpen():
         self.ms_target = ms_target
         self.out_path = out_path
         self.synth = synth
-        
+        #validate input parameters
         _ms_pan = rxr.open_rasterio(ms_pan, chunks= (1,500, 500))
         _ms_target = rxr.open_rasterio(ms_target, chunks= (1,500, 500))
         if synth == True:
@@ -51,7 +52,7 @@ class Sharpen():
             assert target_transform[0] == 20 and _ms_target.shape[0] == 2, 'Please provide S2-SWIR 1 and SWIR 2 stacked image or change synth parameter to False'
         else:
             assert _ms_pan.shape[0] == _ms_target.shape[0], 'Both rasters need to have VNIR bands'
-        
+        #create output dir
         scratch_path = os.path.join(self.out_path, 'scratch_path')
         try:
             os.mkdir(scratch_path)
@@ -93,7 +94,6 @@ class Sharpen():
         
         #check if pan is larger than target. Else clip pan.
         diff_area= ms_pan_bbox.difference(ms_target_r_bbox)
-
         if diff_area.area == 0:
             return self.ms_pan, ms_target
         else:
@@ -111,7 +111,6 @@ class Sharpen():
                 ms_pan= os.path.join(self.scratch_path, raster_name + '_clip_to_target_synth.tif')
             else:
                 ms_pan= os.path.join(self.scratch_path, raster_name + '_clip_to_target.tif')
-            
             #Export clipped image to scratch path
             with rasterio.open(ms_pan, "w", **out_meta) as dest:
                 dest.write(out_img)
@@ -123,37 +122,29 @@ class Sharpen():
         ms_pan, ms_target = self.check_pan_extent()
         ms_pan = xr.open_rasterio(ms_pan, chunks= (1,500, 500))
         ms_target = xr.open_rasterio(ms_target, chunks= (1,500, 500))
-        
         #retrieve pan image transform values
         pan_transform = [ms_pan.transform[2], ms_pan.transform[0], ms_pan.transform[1], ms_pan.transform[5], ms_pan.transform[3], ms_pan.transform[4]]
         pan_projection = ms_pan.rio.crs.wkt
-        
         #retrieve and buffer pan boundaries
         bbox = minx, miny, maxx, maxy= ms_pan.rio.bounds() 
         polygon = shapely.geometry.box(*bbox)
         buffer_poly = polygon.buffer(120, join_style = 2)
         gdf = gpd.GeoDataFrame({'geometry': [buffer_poly]}, crs= ms_pan.rio.crs)
-        
         #get and transpose array values
         ms_pan_arr = ms_pan.values
         ms_pan_arr = np.nan_to_num(ms_pan_arr)
         ms_pan_arr= ms_pan_arr.transpose((1, 2, 0))
-        
         #convert ms_pan to Geoarray
         pan_garr = GeoArray(ms_pan_arr, pan_transform, pan_projection)
-        
         #clip ms_target using buffered pan boundaries
         clipped_ms_target = ms_target.rio.clip(gdf.geometry.apply(mapping), gdf.crs)
-        
         #get and transpose array values
         target_transform = [clipped_ms_target.rio.bounds()[0], ms_target.transform[0], ms_target.transform[1], clipped_ms_target.rio.bounds()[3], ms_target.transform[3], ms_target.transform[4]]
         ms_target_arr= clipped_ms_target.values
         ms_target_arr = np.nan_to_num(ms_target_arr)
         ms_target_arr= ms_target_arr.transpose((1, 2, 0))
-        
         #convert ms_target to Geoarray
         target_garr =  GeoArray(ms_target_arr, target_transform, pan_projection)
-        
         #set AROSICS parameters
         kwargs = {
                 'ws'  : (64,64),
@@ -166,24 +157,19 @@ class Sharpen():
         #run coregistration
         CRL = COREG(pan_garr, target_garr,**kwargs)
         result= CRL.correct_shifts()
-        
         ## result to xarray
         #retrieve raster corner coordinates and pixel resolution
         res = result['updated geotransform'][1]
         xmin = result['updated geotransform'][0]
         ymax = result['updated geotransform'][3]
-
         #store x and y size (horizontal and vertical array length)
         xsize = result['arr_shifted'].shape[0]
         ysize = result['arr_shifted'].shape[1]
-
         #get num of bands
         bands= [x+1 for x in range(result['arr_shifted'].shape[2])]
-
         #create an array that stores all possible coordinates
         x = np.arange(xmin, xmin + xsize * res, res)
         y = np.arange(ymax, ymax - ysize * res, -res)
-
         #create meshgrids
         x_mesh, y_mesh = np.meshgrid(x, y, indexing='ij')
 
@@ -197,13 +183,12 @@ class Sharpen():
                 band=bands,
             )
         )
-
+        #add attrs
         coreg_target=coreg_target.transpose('band', 'y', 'x')
         coreg_target.attrs['crs']= ms_pan.attrs['crs']
         coreg_target.attrs['transform'] = (result['updated geotransform'][1], result['updated geotransform'][2],\
                                             result['updated geotransform'][0], result['updated geotransform'][4],\
                                             result['updated geotransform'][5], result['updated geotransform'][3])
-        
         ## adjust arrays to same number of rows and columns
         coreg_target= coreg_target.chunk(chunks= (1,500, 500))
         minx, miny, maxx, maxy = ms_pan.rio.bounds()
@@ -215,18 +200,15 @@ class Sharpen():
         coreg_target_bbox = box(minx, miny, maxx, maxy)
         gdf= gpd.GeoDataFrame({'geometry': [coreg_target_bbox]}, crs= ms_pan.rio.crs)
         ms_pan = ms_pan.rio.clip(gdf.geometry.apply(mapping), gdf.crs)
-        
         #set no data
         for num, band in enumerate(coreg_target):
             band.values = xr.where(ms_pan[num] ==0 , 0, band.values)
         coreg_target.attrs['_FillValue']= ms_pan.attrs['_FillValue']
-
         return ms_pan, ms_target, coreg_target
 
     def spatial_degradation_math (self, ms_pan, target_transform, _dict_planet_pan):
         #SRTM_MTF values from ESA reports
         _dict_SRTM_MTF = {'blue': 0.29, 'green': 0.28, 'red': 0.265, 'nir': 0.23, 'swir1': 0.19 , 'swir2': 0.24}
-        
         def mtf (_dict_SRTM_MTF, band, target_transform):
             #set f values depending on pixel spatial res
             if target_transform[0] == 10:
@@ -236,7 +218,6 @@ class Sharpen():
             numerad = (f) **2
             denumerad = 2* math.log(_dict_SRTM_MTF[band])
             S = math.sqrt(-(numerad/denumerad))
-            
             return S
         #convolution matrix
         dict_siglam = {}
@@ -245,17 +226,15 @@ class Sharpen():
             S = mtf (_dict_SRTM_MTF, band, target_transform)
             dict_siglam[band] = S
             sig = 1/((dict_siglam[band])*2*math.pi)
-
-            #Generate 41x41 Matrix
+            #generate 41x41 Matrix
             amin = -20
             amax = 21
             list_m = list(product(range(amin, amax), repeat=2))
-
-            #Matrix to df
+            #matrix to df
             df= pd.DataFrame(list_m)
             df.rename(columns={0: 'i', 1:'j'}, inplace=True)
             df.sort_values(['i','j'], ascending=[True, False], inplace=True)
-
+            #calculate matrix
             df['cst'] = ( 1 /(2*math.pi*(sig/ms_pan.rio.transform()[0])**2))
             df['numerad'] = df['i']**2 + df['j']**2
             df['denum'] = 2*(sig/ms_pan.rio.transform()[0])**2
@@ -263,12 +242,11 @@ class Sharpen():
             df['result'] = df['cst']*df['exp']
             #normalize matrix
             df['norm'] = df['result'] /(df['result'].sum())
-
             #define matrix array
             x = np.array(list(df['norm'])).reshape(41, 41)
-
             #define kernel for convolution
             kernel = 1/41 * x
+            #execute convolution
             conv = cv.filter2D(_dict_planet_pan[band], -1, kernel)
             mask = (_dict_planet_pan[band] > 0)
             if np.any(~mask):
@@ -278,9 +256,8 @@ class Sharpen():
                 conv[~mask] = 0
                 scaling_vals = None
                 mask = None
-
+            #add results to dict
             _dict_planet_degraded[band] = conv
-        
         #degraded values to xarray
         array= []
         for band in _dict_planet_degraded:
@@ -288,29 +265,25 @@ class Sharpen():
         array= np.nan_to_num(array)
         degraded_pan= ms_pan.copy()
         degraded_pan.values= array
-
+        #open as dask
         degraded_pan= degraded_pan.chunk(chunks= (1,500, 500))
         return degraded_pan
     
     def spatial_degradation (self):
         """Spatial degradation based on MTF values"""
-        
         ms_pan, ms_target, coreg_target = self.adjust_and_coregister_ms_target()
         target_transform= ms_target.rio.transform()
         _dict_planet_pan = {'blue': ms_pan.values[0], 'green': ms_pan.values[1], 'red': ms_pan.values[2], 'nir': ms_pan.values[3]}
         degraded_pan = self.spatial_degradation_math(ms_pan, target_transform, _dict_planet_pan)
-        
         return ms_pan, ms_target, coreg_target, degraded_pan
 
     def synthetic_and_degraded_swir (self):
         """Synthetic SWIR 1 and 2 and Spatial degradation"""
-        
         ms_pan, ms_target, coreg_target, degraded_pan = self.spatial_degradation()
-        
+        #create df
         df_deg= pd.DataFrame()
         df_res= pd.DataFrame()
         df_target= pd.DataFrame()
-        
         #flatten array values and compute linear regression
         array= []
         for num, band in enumerate(degraded_pan, start= 1):
@@ -328,30 +301,25 @@ class Sharpen():
             df_res[num+5] = coef_list[0]* df_res[1]  +  coef_list[1]* df_res[2]  +  coef_list[2]* df_res[3]  + coef_list[3]* df_res[4]
             array_synth = df_res[num+5].to_numpy().reshape(coreg_target[num].shape)
             array.append(array_synth)
-
         array= np.nan_to_num(array)
         synth_pan= coreg_target.copy()
         synth_pan.values= array
-        
         #degrade synthetic band
         synth_pan= synth_pan.chunk(chunks= (1,500, 500))
         _dict_planet_pan = {'swir1': synth_pan.values[0], 'swir2': synth_pan.values[1]}
         target_transform= ms_target.rio.transform()
         degraded_synth = self.spatial_degradation_math(synth_pan, target_transform, _dict_planet_pan)
-        
         return synth_pan, coreg_target, degraded_synth
     
     def hpf_sharpening (self):
-        
         if self.synth == True:
             synth_pan, coreg_target, degraded_synth = self.synthetic_and_degraded_swir()
             sharp = (coreg_target/degraded_synth)*synth_pan
         else:
             ms_pan, ms_target, coreg_target, degraded_pan = self.spatial_degradation()
             sharp = (coreg_target/degraded_pan)*ms_pan
-
         sharp= sharp.fillna(0)
         sharp = xr.where(sharp < 0, 0, sharp)
         sharp.attrs['_FillValue']= 0
-   
+        clear_output()
         return sharp
