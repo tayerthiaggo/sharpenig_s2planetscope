@@ -8,7 +8,7 @@ The automatization of the sharpening routine proposed by Li et al. (2020) is a s
 
 This study sharpened a series of multispectral Sentinel-2 with Planetscope imagery by automating and slightly modifying the algorithm suggested by Li et al. (2020).
 
-
+---DIAGRAM JPG---
 
 All the details and tests are described in the article ------ .
 
