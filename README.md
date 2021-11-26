@@ -10,7 +10,7 @@ This study sharpened a series of multispectral Sentinel-2 with Planetscope image
 
 
 ## How to cite
-
+Tayer et al 2022......
 
 ## Tutorial
 
