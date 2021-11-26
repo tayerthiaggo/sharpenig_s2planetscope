@@ -1,1 +1,1 @@
-# fusion_s2_planetscope
+#Sharpening Sentinel-2 with Planetscope
