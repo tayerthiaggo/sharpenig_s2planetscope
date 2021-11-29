@@ -18,11 +18,11 @@ Sharpening-S2_Planetscope
 │   ├── classification.py
 │   ├── main.py
 │   └── uniqueList.py
-├── tests/
-│   ├── ###img1/
-│   ├── ###img2/
-│   └── ###imgn/
-└── data/
+├── data/
+│   ├── pan_test.tif
+│   ├── target_swir_test.tif
+│   └── target_vnir_test.tif
+└── tests/
 │   ├── img1/
 │   ├── img2/
 │  
