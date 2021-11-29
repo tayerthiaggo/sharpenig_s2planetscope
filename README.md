@@ -41,9 +41,9 @@ Tayer et al 2022......
 If only sharpening 4 bands:
 * Sentinel-2 - 4 bands (B,G,R,NIR)
 
-If sharpening and synthesizing (Red-edge, SWIR-1 or SWIR-2):
-* Sentinel-2 - 4 bands (B,G,R,NIR) + Sentinel-2 - (bands to be synthesized)
-* Sentinel-2 - X bands (B,G,R,NIR, + bands to be synthesized). Ex: Sentinel-2 (B,G,R,NIR,SWIR-1,SWIR-2); Sentinel-2 (B,G,R,NIR,Red-Edge,SWIR-2) etc.
+If sharpening and synthesizing (SWIR-1 or SWIR-2):
+* Sentinel-2 - 4 bands (B,G,R,NIR) + Sentinel-2 - 2 bands (SWIR-1,SWIR-2)
+* Sentinel-2 - 6 bands (B,G,R,NIR,SWIR-1,SWIR-2).
 ## Dependencies
 The required libraries are:
 ```
