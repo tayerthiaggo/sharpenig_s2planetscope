@@ -13,6 +13,7 @@ All the details and tests are described in the article ------ .
 Sharpening-S2_Planetscope
 │── README.md
 │── requirements.txt
+│── workflow_diagram.jpeg
 ├── code/
 │   ├── __init__.py
 │   ├── classification.py
