@@ -38,18 +38,18 @@ Tayer et al 2022......
 ## Dependencies
 The required libraries are:
 ```
-arosics==1.2.6
-geoarray==0.12.3
-geopandas==0.10.2
-ipython==7.30.0
-numpy==1.21.4
-pandas==1.2.2
-rasterio==1.2.0
-rioxarray==0.4.0
-scikit-learn==1.0.1
-Shapely==1.7.1
-xarray==0.17.0
-opencv==4.5.3
+arosics>=1.2.6
+geoarray>=0.12.3
+geopandas>=0.10.2
+ipython>=7.30.0
+numpy>=1.21.4
+pandas>=1.2.2
+rasterio>=1.2.0
+rioxarray>=0.4.0
+scikit_learn>=1.0.1
+Shapely>=1.7.1
+xarray>=0.17.0
+opencv-python>=4.5.4.60
 ```
 Note that GDAL is required to run rasterio and others. Thus, we highly recommend using conda to install packages either from:
 
