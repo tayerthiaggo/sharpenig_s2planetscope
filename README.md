@@ -36,9 +36,10 @@ Tayer et al 2022......
 
 
 ## Dependencies
-
+Create a new conda virtual environment with requirements using:
 conda create --name YourVenvName --file .\requirements.txt
-
+or, install requirements in your current environment using conda:
+conda install .\requirements.txt
 ```
 arosics==1.2.6
 geoarray==0.12.3
