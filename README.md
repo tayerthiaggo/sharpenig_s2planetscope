@@ -40,10 +40,19 @@ Tayer et al 2022......
 conda create --name YourVenvName --file .\requirements.txt
 
 ```
-
-
+arosics==1.2.6
+geoarray==0.12.3
+geopandas==0.10.2
+ipython==7.30.0
+numpy==1.20.1
+pandas==1.2.2
+rasterio==1.2.0
+rioxarray==0.4.0
+scikit-learn==1.0.1
+Shapely==1.7.1
+xarray==0.17.0
+opencv==4.5.3
 ```
-
 ## References
 
 Li, Z.; Zhang, H.K.; Roy, D.P.; Yan, L.; Huang, H. Sharpening the Sentinel-2 10 and 20 m Bands to Planetscope-0 3 m Resolution. Remote Sens. 2020, 12, 2406. https://doi.org/10.3390/rs12152406
