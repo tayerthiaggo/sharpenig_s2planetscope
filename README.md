@@ -28,6 +28,7 @@ Sharpening-S2_Planetscope
 ```
 ## How to cite
 Tayer et al 2022......
+– Sharpening Sentinel-2 with Planetscope imagery and testing sensitivity of input parameters for surface water detection using the Water Detect algorithm in an intermittent river
 
 ## Tutorial
 
