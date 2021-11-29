@@ -23,8 +23,7 @@ Sharpening-S2_Planetscope
 │   ├── target_swir_test.tif
 │   └── target_vnir_test.tif
 └── tests/
-│   ├── img1/
-│   ├── img2/
+│   ├── sharpening_test.ipynb
 ```
 ## How to cite
 Tayer et al 2022......
