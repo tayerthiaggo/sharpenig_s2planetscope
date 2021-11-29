@@ -51,12 +51,13 @@ Shapely==1.7.1
 xarray==0.17.0
 opencv==4.5.3
 ```
+Note that GDAL is required to run rasterio and others. We highly recommend using conda to install packages either from:
 
-Create a new conda virtual environment with requirements using:
+1. Creating a new conda virtual environment with requirements using:
 
 `conda create --name YourVenvName --file .\requirements.txt`
 
-or, install requirements in your current environment using conda:
+or 2., install requirements in your current environment using conda:
 
 `conda install .\requirements.txt`
 ## References
