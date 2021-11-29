@@ -25,10 +25,7 @@ Sharpening-S2_Planetscope
 └── tests/
 │   ├── img1/
 │   ├── img2/
-│  
-
 ```
-
 ## How to cite
 Tayer et al 2022......
 
