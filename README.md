@@ -16,9 +16,8 @@ Sharpening-S2_Planetscope
 │── workflow_diagram.jpeg
 ├── code/
 │   ├── __init__.py
-│   ├── classification.py
+│   ├── sharpen_classes.py
 │   ├── main.py
-│   └── uniqueList.py
 ├── data/
 │   ├── pan_test.tif
 │   ├── target_swir_test.tif
