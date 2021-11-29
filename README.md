@@ -1,5 +1,5 @@
 # Sharpening Sentinel-2 with Planetscope
-## Synopsis
+## Description
 Image sharpening has been developed to get the best of both spectral and spatial resolution by integrating different image sources to improve the information and quality of multispectral images. Satellites with no Pan band can use other satellites’ high-resolution bands to emulate a Pan band, provided the pixel resolution and the sharpening algorithm are suited to the specific process. In this context, Li et al. (2020) tested methods to combine Sentinel-2 with high-resolution Planetscope-0 imagery for Earth Observation studies. 
 
 In this repository we provide an automated and slightly modified version for the RGB-NIR sharpening and SWIR-1(2) sythesizing routine proposed by Li et al. (2020). This is a significant upgrade that makes it possible to easily and quickly sharpen many images or time series and removes the human factor, which can introduce error. The algorithm workflow is presented in the diagram below.
