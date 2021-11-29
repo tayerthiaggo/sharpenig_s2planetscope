@@ -37,7 +37,7 @@ Tayer et al 2022......
 
 ## Dependencies
 
-conda create --name <YourVenvName> --file .\requirements.txt
+conda create --name YourVenvName --file .\requirements.txt
 
 ```
 
