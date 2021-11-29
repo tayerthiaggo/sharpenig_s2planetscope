@@ -44,20 +44,20 @@ If sharpening and synthesizing (SWIR-1 or SWIR-2):
 * Sentinel-2 - 4 bands (B,G,R,NIR) + Sentinel-2 - 2 bands (SWIR-1,SWIR-2)
 * Sentinel-2 - 6 bands (B,G,R,NIR,SWIR-1,SWIR-2).
 ## Dependencies
-The required libraries are:
+The required libraries are (conda install):
 ```
 arosics>=1.2.6
 geoarray>=0.12.3
 geopandas>=0.10.2
-ipython>=7.30.0
-numpy>=1.21.4
+ipython>=7.29.0
+numpy>=1.21.2
 pandas>=1.2.2
 rasterio>=1.2.0
 rioxarray>=0.4.0
-scikit_learn>=1.0.1
-Shapely>=1.7.1
+scikit-learn>=1.0.1
+shapely>=1.7.1
 xarray>=0.17.0
-opencv-python>=4.5.4.60
+opencv>=4.5.3
 ```
 Note that GDAL is required to run rasterio and others. Thus, we highly recommend using conda to install packages either from:
 
