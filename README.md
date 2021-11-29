@@ -17,7 +17,6 @@ Sharpening-S2_Planetscope
 ├── code/
 │   ├── __init__.py
 │   ├── sharpen_classes.py
-│   ├── main.py
 ├── data/
 │   ├── pan_test.tif
 │   ├── target_swir_test.tif
