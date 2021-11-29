@@ -35,6 +35,7 @@ Tayer et al 2022......
 ## Supported Formats
 -- Pan 
 * Planetscope - 4 bands (B,G,R,NIR)
+
 -- Target
 If only sharpening 4 bands:
 * Sentinel-2 - 4 bands (B,G,R,NIR)
