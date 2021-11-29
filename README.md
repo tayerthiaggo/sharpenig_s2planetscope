@@ -55,7 +55,7 @@ Note that GDAL is required to run rasterio and others. Thus, we highly recommend
 
 1. Creating a new conda virtual environment with requirements using:
 
-`conda create --name YourVenvName --file .\requirements.txt`
+`conda create --name YourVenvName python=x.x anaconda --file .\requirements.txt`
 
 or 2., installing requirements in your current environment using conda:
 
