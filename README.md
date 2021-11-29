@@ -42,7 +42,7 @@ arosics==1.2.6
 geoarray==0.12.3
 geopandas==0.10.2
 ipython==7.30.0
-numpy==1.20.1
+numpy==1.21.4
 pandas==1.2.2
 rasterio==1.2.0
 rioxarray==0.4.0
