@@ -144,7 +144,7 @@ class Sharpen():
         target_garr =  GeoArray(ms_target_arr, target_transform, pan_projection)
         #set AROSICS parameters
         kwargs = {
-                #'ws'  : (1,1),
+                #'ws'  : (64,64),
                 'align_grids'  : True,
                 'match_gsd'    : True,
                 'mask_baddata_ref' : None,
