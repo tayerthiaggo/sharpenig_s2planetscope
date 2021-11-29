@@ -16,8 +16,6 @@ from sklearn import linear_model
 import xarray as xr
 import rioxarray as rxr
 import cv2 as cv
-import numpy as np
-
 from IPython.display import clear_output
 
 def stack_sharpen_vnir_swir (sharp_vnir, sharp_swir, out_path_name):
@@ -52,7 +50,7 @@ class Sharpen():
         else:
             assert _ms_pan.shape[0] == _ms_target.shape[0], 'Both rasters need to have VNIR bands'
         #create output dir
-        scratch_path = os.path.join(self.out_path, 'scratch_path')
+        scratch_path = os.path.join(self.out_path, 'sharpened_results')
         try:
             os.mkdir(scratch_path)
         except:
@@ -146,7 +144,7 @@ class Sharpen():
         target_garr =  GeoArray(ms_target_arr, target_transform, pan_projection)
         #set AROSICS parameters
         kwargs = {
-                'ws'  : (64,64),
+                #'ws'  : (1,1),
                 'align_grids'  : True,
                 'match_gsd'    : True,
                 'mask_baddata_ref' : None,
