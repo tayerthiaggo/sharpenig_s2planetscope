@@ -25,8 +25,7 @@ Sharpening-S2_Planetscope
 │   ├── sharpening_test.ipynb
 ```
 ## How to cite
-Tayer et al 2022......
-– Sharpening Sentinel-2 with Planetscope imagery and testing sensitivity of input parameters for surface water detection using the Water Detect algorithm in an intermittent river
+Tayer T.C., Douglas M.M., Cordeiro M.C.R., Tayer A.D.N., Callow J.N., Beesley L. & McFarlane D. (2023) Improving the accuracy of the Water Detect algorithm using Sentinel-2, Planetscope and sharpened imagery: a case study in an intermittent river, GIScience & Remote Sensing, 60:1, DOI: 10.1080/15481603.2023.2168676
 
 ## Tutorial
 
@@ -72,4 +71,4 @@ or 2., installing requirements in your current environment using conda:
 
 Li, Z.; Zhang, H.K.; Roy, D.P.; Yan, L.; Huang, H. Sharpening the Sentinel-2 10 and 20 m Bands to Planetscope-0 3 m Resolution. Remote Sens. 2020, 12, 2406. https://doi.org/10.3390/rs12152406
 
-Tayer et al 2022 (in review)
+Tayer T.C., Douglas M.M., Cordeiro M.C.R., Tayer A.D.N., Callow J.N., Beesley L. & McFarlane D. (2023) Improving the accuracy of the Water Detect algorithm using Sentinel-2, Planetscope and sharpened imagery: a case study in an intermittent river, GIScience & Remote Sensing, 60:1, DOI: 10.1080/15481603.2023.2168676
